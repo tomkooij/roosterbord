@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen URL + Token + Datum (DD-MM-YYYY)</title>
+    <title>Rowizer Viewer (Coornhert)</title>
     <style>
         html, body {height: 100%; margin: 0; padding: 0; overflow: hidden;
                     font-family: Arial, sans-serif; background-color: #222;}
@@ -29,21 +29,21 @@
     <div class="input-section">
         <div class="input-row">
             <label for="urlInput">URL:</label>
-            <input type="text" id="urlInput" placeholder="https://mijnapp.nl/rapport" 
-                   value="https://nl.wikipedia.org">
+            <input type="text" id="urlInput" 
+                   value="https://tomkooij.nl/Rowizer/?portal=coornhert-gymnasium">
         </div>
 
         <div class="input-row">
             <label for="tokenInput">Token:</label>
-            <input type="text" id="tokenInput" placeholder="abc123xyz987" 
-                   value="mijngeheimetoken123">
+            <input type="text" id="tokenInput" placeholder="vul je token in" 
+                   value="">
         </div>
 
         <div class="input-row">
             <label for="dateInput">Datum:</label>
             <input type="text" id="dateInput" placeholder="dd-mm-jjjj" readonly 
                    style="background-color:#555;color:white;">
-            <button onclick="loadURL()">Laad website</button>
+            <button onclick="loadURL()">Laad Rowizer</button>
         </div>
     </div>
 
@@ -53,65 +53,53 @@
 </div>
 
 <script>
-    // Zet vandaag in formaat DD-MM-YYYY
+    // Vandaag in DD-MM-YYYY
     function setTodayDDMMYYYY() {
         const today = new Date();
         const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); // januari = 0
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
         const yyyy = today.getFullYear();
         const formatted = `${dd}-${mm}-${yyyy}`;
         document.getElementById('dateInput').value = formatted;
         return formatted;
     }
 
-    // Voeg token en/of datum (DD-MM-YYYY) toe aan URL
+    // Bouw URL met token + datum
     function buildUrl(baseUrl, token, date) {
         let url = baseUrl;
-
         if (token) {
             const sep = url.includes('?') ? '&' : '?';
             url += sep + 'token=' + encodeURIComponent(token);
         }
-
         if (date) {
             const sep = url.includes('?') ? '&' : '?';
-            url += sep + 'date=' + encodeURIComponent(date); // bijv. date=30-11-2025
+            url += sep + 'date=' + encodeURIComponent(date);
         }
-
         return url;
     }
 
     function loadURL() {
         let url   = document.getElementById('urlInput').value.trim();
         let token = document.getElementById('tokenInput').value.trim();
-        let date  = document.getElementById('dateInput').value; // al DD-MM-YYYY
+        let date  = document.getElementById('dateInput').value;
 
-        if (!url) {
-            alert('Voer een URL in!');
-            return;
-        }
-
-        // Voeg https:// toe als het ontbreekt
-        if (!/^https?:\/\//i.test(url)) {
-            url = 'https://' + url;
-            document.getElementById('urlInput').value = url;
-        }
+        if (!url) { alert('URL ontbreekt!'); return; }
 
         url = buildUrl(url, token, date);
         document.getElementById('websiteFrame').src = url;
     }
 
-    // Enter in elk veld → laden
+    // Enter = laden
     ['urlInput', 'tokenInput'].forEach(id => {
         document.getElementById(id).addEventListener('keypress', e => {
             if (e.key === 'Enter') loadURL();
         });
     });
 
-    // Initialisatie
+    // Start
     window.onload = function() {
-        setTodayDDMMYYYY();   // vul met vandaag in DD-MM-YYYY
-        loadURL();            // laad meteen (handig bij standaardwaarden)
+        setTodayDDMMYYYY();
+        loadURL();  // opent direct Rowizer met de datum van vandaag
     };
 </script>
 
