@@ -22,7 +22,7 @@
                             font-size: 16px; border: none; border-radius: 8px; outline: none;}
         #tokenInput {max-width: 400px;}
         .date-controls {display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
-        .date-nav button {
+        button.date-nav {
             padding: 10px 14px; background-color: #555; color: white;
             border: none; border-radius: 6px; cursor: pointer; font-size: 15px;
         }
@@ -58,17 +58,17 @@
         <div class="input-row">
             <label for="tokenInput">Token:</label>
             <input type="text" id="tokenInput" placeholder="vul je token in">
-            <span class="saved-note" id="savedNote">Opgeslagen!</span>
+            <span class="saved-note" id="savedNote">Token opgeslagen in localStorage -- op dit device!</span>
         </div>
 
         <div class="input-row">
             <label>Datum:</label>
             <div class="date-controls">
-                <button type="button" onclick="changeDate(-1)">Vorige dag</button>
+                <button class="date-nav" type="button" onclick="changeDate(-1)">Vorige dag</button>
                 <input type="text" id="dateInput" class="flatpickr-input" readonly>
-                <button type="button" onclick="changeDate(1)">Volgende dag</button>
+                <button class="date-nav" type="button" onclick="changeDate(1)">Volgende dag</button>
             </div>
-            <button class="load-btn" onclick="loadURL()">Laad Rowizer</button>
+            <button class="load-btn" onclick="loadURL()">Laad Roosterbord</button>
         </div>
     </div>
 
@@ -89,10 +89,13 @@
     function saveToken() {
         const token = document.getElementById('tokenInput').value.trim();
         if (token) {
-            localStorage.setItem(TOKEN_KEY, token);
-            const note = document.getElementById('savedNote');
-            note.classList.add('show');
-            setTimeout(() => note.classList.remove('show'), 2000);
+            const savedtoken = localStorage.getItem(TOKEN_KEY);
+            if (token != savedtoken) {
+                localStorage.setItem(TOKEN_KEY, token);
+                const note = document.getElementById('savedNote');
+                note.classList.add('show');
+                setTimeout(() => note.classList.remove('show'), 5000);
+            }
         }
     }
 
