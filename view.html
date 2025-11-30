@@ -13,22 +13,22 @@
         html, body {height: 100%; margin: 0; padding: 0; overflow: hidden;
                     font-family: Arial, sans-serif; background-color: #222;}
         .container {display: flex; flex-direction: column; height: 100vh;}
-        .input-section {padding: 15px; background-color: #333; color: white;
+        .input-section {font-size: 20px; padding: 15px; background-color: #333; color: white;
                         box-shadow: 0 2px 10px rgba(0,0,0,0.5);}
         .input-row {display: flex; flex-wrap: wrap; gap: 12px;
                     align-items: center; margin-bottom: 12px;}
         label {font-weight: bold; min-width: 70px;}
-        input[type="text"] {flex: 1; min-width: 250px; padding: 12px 16px;
-                            font-size: 16px; border: none; border-radius: 8px; outline: none;}
-        #tokenInput {max-width: 400px;}
-        .date-controls {display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
+        input[type="text"] {flex: 1; min-width: 150px; padding: 12px 16px;
+                            font-size: 100%; border: none; border-radius: 8px; outline: none;}
+        #tokenInput {max-width: 300px;}
+        .date-controls {display: flex; align-items: center; gap: 6px; flex-wrap: wrap;}
         button.date-nav {
             padding: 10px 14px; background-color: #555; color: white;
-            border: none; border-radius: 6px; cursor: pointer; font-size: 15px;
+            border: none; border-radius: 6px; cursor: pointer; font-size: 100%;
         }
         .date-nav button:hover {background-color: #666;}
         button.load-btn {
-            padding: 12px 32px; font-size: 16px; background-color: #28a745;
+            padding: 12px 32px; font-size: 100%; background-color: #28a745;
             color: white; border: none; border-radius: 8px; cursor: pointer;
         }
         button.load-btn:hover {background-color: #218838;}
@@ -39,7 +39,7 @@
             cursor: pointer; padding: 12px 8px; border-radius: 6px;
         }
         .saved-note {
-            font-size: 12px; color: #0f0; margin-left: 10px; opacity: 0;
+            font-size: 100%; color: #0f0; margin-left: 10px; opacity: 0;
             transition: opacity 0.4s;
         }
         .saved-note.show {opacity: 1;}
@@ -59,9 +59,9 @@
         <div class="input-row">
             <label>Datum:</label>
             <div class="date-controls">
-                <button class="date-nav" type="button" onclick="changeDate(-1)">Vorige dag</button>
+                <button class="date-nav" type="button" onclick="changeDate(-1)">Vorige</button>
                 <input type="text" id="dateInput" class="flatpickr-input" readonly>
-                <button class="date-nav" type="button" onclick="changeDate(1)">Volgende dag</button>
+                <button class="date-nav" type="button" onclick="changeDate(1)">Volgende</button>
             </div>
             <button class="load-btn" onclick="loadURL()">Laad Roosterbord</button>
         </div>
