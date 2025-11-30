@@ -5,55 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rowizer - Coornhert Gymnasium</title>
 
-    <!-- Flatpickr CSS + Nederlandse taal -->
+    <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
 
     <style>
-        html, body {
-            height: 100%; margin: 0; padding: 0; overflow: hidden;
-            font-family: Arial, sans-serif; background-color: #222;
-        }
-        .container {
-            display: flex; flex-direction: column; height: 100vh;
-        }
-        .input-section {
-            padding: 15px; background-color: #333; color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-        .input-row {
-            display: flex; flex-wrap: wrap; gap: 12px;
-            align-items: center; margin-bottom: 12px;
-        }
-        label {
-            font-weight: bold; min-width: 70px;
-        }
-        input[type="text"] {
-            flex: 1; min-width: 250px; padding: 12px 16px;
-            font-size: 16px; border: none; border-radius: 8px; outline: none;
-        }
-        #tokenInput { max-width: 400px; }
-        .date-controls {
-            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-        }
+        html, body {height: 100%; margin: 0; padding: 0; overflow: hidden;
+                    font-family: Arial, sans-serif; background-color: #222;}
+        .container {display: flex; flex-direction: column; height: 100vh;}
+        .input-section {padding: 15px; background-color: #333; color: white;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.5);}
+        .input-row {display: flex; flex-wrap: wrap; gap: 12px;
+                    align-items: center; margin-bottom: 12px;}
+        label {font-weight: bold; min-width: 70px;}
+        input[type="text"] {flex: 1; min-width: 250px; padding: 12px 16px;
+                            font-size: 16px; border: none; border-radius: 8px; outline: none;}
+        #tokenInput {max-width: 400px;}
+        .date-controls {display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
         .date-nav button {
             padding: 10px 14px; background-color: #555; color: white;
             border: none; border-radius: 6px; cursor: pointer; font-size: 15px;
         }
-        .date-nav button:hover { background-color: #666; }
+        .date-nav button:hover {background-color: #666;}
         button.load-btn {
             padding: 12px 32px; font-size: 16px; background-color: #28a745;
             color: white; border: none; border-radius: 8px; cursor: pointer;
         }
-        button.load-btn:hover { background-color: #218838; }
-        .viewer { flex: 1; background-color: white; }
-        iframe { width: 100%; height: 100%; border: none; }
-
-        /* Flatpickr input mooi maken */
+        button.load-btn:hover {background-color: #218838;}
+        .viewer {flex: 1; background-color: white;}
+        iframe {width: 100%; height: 100%; border: none;}
         .flatpickr-input {
             background: #555; color: white; text-align: center; width: 140px;
-            cursor: pointer;
+            cursor: pointer; padding: 12px 8px; border-radius: 6px;
         }
+        .saved-note {
+            font-size: 12px; color: #0f0; margin-left: 10px; opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .saved-note.show {opacity: 1;}
     </style>
 </head>
 <body>
@@ -68,17 +57,15 @@
 
         <div class="input-row">
             <label for="tokenInput">Token:</label>
-            <input type="text" id="tokenInput" placeholder="vul je token in" value="">
+            <input type="text" id="tokenInput" placeholder="vul je token in">
+            <span class="saved-note" id="savedNote">Opgeslagen!</span>
         </div>
 
         <div class="input-row">
             <label>Datum:</label>
             <div class="date-controls">
                 <button type="button" onclick="changeDate(-1)">Vorige dag</button>
-                
-                <!-- Flatpickr wordt hierop geïnitialiseerd -->
                 <input type="text" id="dateInput" class="flatpickr-input" readonly>
-
                 <button type="button" onclick="changeDate(1)">Volgende dag</button>
             </div>
             <button class="load-btn" onclick="loadURL()">Laad Rowizer</button>
@@ -86,18 +73,37 @@
     </div>
 
     <div class="viewer">
-        <iframe id="websiteFrame" src=""></iframe>
+        <iframe id="websiteFrame" src="" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
     </div>
 </div>
 
-<!-- Flatpickr JavaScript + Nederlandse taal -->
+<!-- Flatpickr -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/nl.js"></script>
 
 <script>
     let currentDate = new Date();
+    const TOKEN_KEY = "rowizer_token_coornhert";
 
-    // Initialiseer Flatpickr met Nederlandse taal en DD-MM-YYYY formaat
+    // === TOKEN OPSLAAN / LADEN ===
+    function saveToken() {
+        const token = document.getElementById('tokenInput').value.trim();
+        if (token) {
+            localStorage.setItem(TOKEN_KEY, token);
+            const note = document.getElementById('savedNote');
+            note.classList.add('show');
+            setTimeout(() => note.classList.remove('show'), 2000);
+        }
+    }
+
+    function loadSavedToken() {
+        const saved = localStorage.getItem(TOKEN_KEY);
+        if (saved) {
+            document.getElementById('tokenInput').value = saved;
+        }
+    }
+
+    // === DATUM & FLATPICKR ===
     const fp = flatpickr("#dateInput", {
         dateFormat: "d-m-Y",
         defaultDate: currentDate,
@@ -105,16 +111,17 @@
         weekNumbers: true,
         onChange: function(selectedDates, dateStr) {
             currentDate = selectedDates[0];
-            loadURL(); // direct laden na kiezen
+            loadURL();
         }
     });
 
     function changeDate(days) {
         currentDate.setDate(currentDate.getDate() + days);
-        fp.setDate(currentDate, true); // update Flatpickr
+        fp.setDate(currentDate, true);
         loadURL();
     }
 
+    // === URL BOUWEN & LADEN ===
     function buildUrl(baseUrl, token, dateStr) {
         let url = baseUrl.trim();
         if (token) {
@@ -140,19 +147,23 @@
 
         const finalUrl = buildUrl(urlBase, token, dateStr);
         document.getElementById('websiteFrame').src = finalUrl;
+
+        // Token opslaan zodra je op Enter of Laad klikt
+        saveToken();
     }
 
-    // Enter in URL of token → laden
+    // === EVENTS ===
     ['urlInput', 'tokenInput'].forEach(id => {
         document.getElementById(id).addEventListener('keypress', e => {
             if (e.key === 'Enter') loadURL();
         });
     });
 
-    // Start: vandaag tonen en direct Rowizer openen
+    // === START ===
     window.onload = function() {
+        loadSavedToken();           // token terugzetten
         fp.setDate(currentDate, true);
-        loadURL();
+        loadURL();                  // direct openen met opgeslagen token + vandaag
     };
 </script>
 
