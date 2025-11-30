@@ -3,109 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fullscreen URL Viewer</title>
+    <title>Fullscreen URL + Token + Datum (DD-MM-YYYY)</title>
     <style>
-        /* Alles 100% hoogte en breedte */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-            background-color: #222;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;      /* volledige viewport hoogte */
-            width: 100vw;
-        }
-
-        .input-section {
-            padding: 15px;
-            background-color: #333;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 10;
-            flex-shrink: 0;     /* voorkomt dat deze sectie krimpt */
-        }
-
-        #urlInput {
-            width: 70%;
-            max-width: 800px;
-            padding: 12px 16px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px 0 0 8px;
-            outline: none;
-        }
-
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 0 8px 8px 0;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .viewer {
-            flex: 1;                    /* neemt alle resterende ruimte in */
-            background-color: white;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        html, body {height: 100%; margin: 0; padding: 0; overflow: hidden;
+                    font-family: Arial, sans-serif; background-color: #222;}
+        .container {display: flex; flex-direction: column; height: 100vh;}
+        .input-section {padding: 15px; background-color: #333; color: white;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.5);}
+        .input-row {display: flex; flex-wrap: wrap; gap: 12px;
+                    align-items: center; margin-bottom: 10px;}
+        label {font-weight: bold; min-width: 70px;}
+        input[type="text"] {flex: 1; min-width: 250px; padding: 12px 16px;
+                            font-size: 16px; border: none; border-radius: 8px; outline: none;}
+        #tokenInput, #dateInput {max-width: 350px;}
+        button {padding: 12px 32px; font-size: 16px; background-color: #28a745;
+                color: white; border: none; border-radius: 8px; cursor: pointer;}
+        button:hover {background-color: #218838;}
+        .viewer {flex: 1; background-color: white;}
+        iframe {width: 100%; height: 100%; border: none;}
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="input-section">
-        <input type="text" id="urlInput" placeholder="Voer een URL in (bijv. https://www.example.com)" 
-               value="https://nl.wikipedia.org">
-        <button onclick="loadURL()">Laad website</button>
+        <div class="input-row">
+            <label for="urlInput">URL:</label>
+            <input type="text" id="urlInput" placeholder="https://mijnapp.nl/rapport" 
+                   value="https://nl.wikipedia.org">
+        </div>
+
+        <div class="input-row">
+            <label for="tokenInput">Token:</label>
+            <input type="text" id="tokenInput" placeholder="abc123xyz987" 
+                   value="mijngeheimetoken123">
+        </div>
+
+        <div class="input-row">
+            <label for="dateInput">Datum:</label>
+            <input type="text" id="dateInput" placeholder="dd-mm-jjjj" readonly 
+                   style="background-color:#555;color:white;">
+            <button onclick="loadURL()">Laad website</button>
+        </div>
     </div>
 
     <div class="viewer">
-        <iframe id="websiteFrame" src="https://nl.wikipedia.org"></iframe>
+        <iframe id="websiteFrame" src=""></iframe>
     </div>
 </div>
 
 <script>
-    function loadURL() {
-        let url = document.getElementById('urlInput').value.trim();
+    // Zet vandaag in formaat DD-MM-YYYY
+    function setTodayDDMMYYYY() {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // januari = 0
+        const yyyy = today.getFullYear();
+        const formatted = `${dd}-${mm}-${yyyy}`;
+        document.getElementById('dateInput').value = formatted;
+        return formatted;
+    }
 
-        if (url === '') {
+    // Voeg token en/of datum (DD-MM-YYYY) toe aan URL
+    function buildUrl(baseUrl, token, date) {
+        let url = baseUrl;
+
+        if (token) {
+            const sep = url.includes('?') ? '&' : '?';
+            url += sep + 'token=' + encodeURIComponent(token);
+        }
+
+        if (date) {
+            const sep = url.includes('?') ? '&' : '?';
+            url += sep + 'date=' + encodeURIComponent(date); // bijv. date=30-11-2025
+        }
+
+        return url;
+    }
+
+    function loadURL() {
+        let url   = document.getElementById('urlInput').value.trim();
+        let token = document.getElementById('tokenInput').value.trim();
+        let date  = document.getElementById('dateInput').value; // al DD-MM-YYYY
+
+        if (!url) {
             alert('Voer een URL in!');
             return;
         }
 
-        // Automatisch http:// toevoegen als er niets staat
+        // Voeg https:// toe als het ontbreekt
         if (!/^https?:\/\//i.test(url)) {
             url = 'https://' + url;
-            document.getElementById('urlInput').value = url; // toon de gecorrigeerde URL
+            document.getElementById('urlInput').value = url;
         }
 
+        url = buildUrl(url, token, date);
         document.getElementById('websiteFrame').src = url;
     }
 
-    // Enter-toets in het invoerveld
-    document.getElementById('urlInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') loadURL();
+    // Enter in elk veld → laden
+    ['urlInput', 'tokenInput'].forEach(id => {
+        document.getElementById(id).addEventListener('keypress', e => {
+            if (e.key === 'Enter') loadURL();
+        });
     });
 
-    // Optioneel: bij het laden van de pagina direct de standaard-URL tonen
+    // Initialisatie
     window.onload = function() {
-        loadURL();
+        setTodayDDMMYYYY();   // vul met vandaag in DD-MM-YYYY
+        loadURL();            // laad meteen (handig bij standaardwaarden)
     };
 </script>
 
