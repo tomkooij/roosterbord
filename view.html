@@ -49,12 +49,7 @@
 
 <div class="container">
     <div class="input-section">
-        <div class="input-row">
-            <label for="urlInput">URL:</label>
-            <input type="text" id="urlInput" 
-                   value="https://tomkooij.nl/Rowizer/?portal=coornhert-gymnasium">
-        </div>
-
+    
         <div class="input-row">
             <label for="tokenInput">Token:</label>
             <input type="text" id="tokenInput" placeholder="vul je token in">
@@ -139,7 +134,8 @@
     }
 
     function loadURL() {
-        const urlBase = document.getElementById('urlInput').value.trim();
+        //const urlBase = document.getElementById('urlInput').value.trim();
+        const urlBase = "https://tomkooij.nl/Rowizer/?portal=coornhert-gymnasium";
         const token   = document.getElementById('tokenInput').value.trim();
         const dateStr = document.getElementById('dateInput').value;
 
@@ -156,7 +152,7 @@
     }
 
     // === EVENTS ===
-    ['urlInput', 'tokenInput'].forEach(id => {
+    ['tokenInput'].forEach(id => {
         document.getElementById(id).addEventListener('keypress', e => {
             if (e.key === 'Enter') loadURL();
         });
