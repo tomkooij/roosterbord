@@ -59,7 +59,8 @@
             </div>
             <button class="load-btn" onclick="loadURL()">Laad Roosterbord</button>
             <label for="tokenInput">Token:</label>
-            <input type="text" id="tokenInput" placeholder="vul je token in">
+            <input type="password" id="tokenInput" placeholder="vul je token in">
+            <button type="button" id="toggleTokenBtn" onclick="toggleTokenVisibility()">Laat token zien!</button>
             <span class="saved-note" id="savedNote">Token opgeslagen in localStorage -- op dit device!</span>
         </div>
     </div>
@@ -77,6 +78,19 @@
     let currentDate = new Date();
     const TOKEN_KEY = "rowizer_token_coornhert";
 
+
+    function toggleTokenVisibility() {
+        var tokenField = document.getElementById("tokenInput"); // Zorg dat dit ID klopt met je input veld
+        var btn = document.getElementById("toggleTokenBtn");
+
+        if (tokenField.type === "text") {
+            tokenField.type = "password";
+            btn.innerText = "Laat token zien!";
+        } else {
+            tokenField.type = "text";
+            btn.innerText = "Verberg geheim token!";
+        }
+    }
     // === TOKEN OPSLAAN / LADEN ===
     function saveToken() {
         const token = document.getElementById('tokenInput').value.trim();
