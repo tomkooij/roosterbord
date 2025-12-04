@@ -60,7 +60,7 @@
             <button class="load-btn" onclick="loadURL()">Laad Roosterbord</button>
             <label for="tokenInput">Token:</label>
             <input type="password" id="tokenInput" class="flatpickr-input" placeholder="vul je token in">
-            <button class="date-nav" type="button" id="toggleTokenBtn" onclick="toggleTokenVisibility()">Laat token zien.</button>
+            <button class="date-nav" type="button" id="toggleTokenBtn" onclick="toggleTokenVisibility()">👁</button>
             <span class="saved-note" id="savedNote">Token opgeslagen in localStorage -- op dit device!</span>
         </div>
     </div>
@@ -85,10 +85,10 @@
 
         if (tokenField.type === "text") {
             tokenField.type = "password";
-            btn.innerText = "Laat token zien.";
+            btn.innerText = "👁";
         } else {
             tokenField.type = "text";
-            btn.innerText = "Verberg geheim token!";
+            btn.innerText = "🙈";
         }
     }
     // === TOKEN OPSLAAN / LADEN ===
