@@ -56,6 +56,7 @@
                 <button class="date-nav" type="button" onclick="changeDate(-1)">Vorige</button>
                 <input type="text" id="dateInput" class="flatpickr-input" readonly>
                 <button class="date-nav" type="button" onclick="changeDate(1)">Volgende</button>
+                <button class="date-nav" type="button" onclick="Today()">Vandaag</button>
             </div>
             <button class="load-btn" onclick="loadURL()">Laad Roosterbord</button>
             <label for="tokenInput">Token:</label>
@@ -76,6 +77,8 @@
 
 <script>
     let currentDate = new Date();
+    let todayDate = new Date();
+
     const TOKEN_KEY = "rowizer_token_coornhert";
 
 
@@ -126,6 +129,12 @@
 
     function changeDate(days) {
         currentDate.setDate(currentDate.getDate() + days);
+        fp.setDate(currentDate, true);
+        loadURL();
+    }
+
+    function Today() {
+        currentDate = todayDate;
         fp.setDate(currentDate, true);
         loadURL();
     }
