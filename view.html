@@ -56,7 +56,7 @@
                 <button class="date-nav" type="button" onclick="changeDate(-1)">Vorige</button>
                 <input type="text" id="dateInput" class="flatpickr-input" readonly>
                 <button class="date-nav" type="button" onclick="changeDate(1)">Volgende</button>
-                <button class="date-nav" type="button" onclick="Today()">Vandaag</button>
+                <button class="date-nav" type="button" onclick="gotoToday()">Vandaag</button>
             </div>
             <button class="load-btn" onclick="loadURL()">Laad Roosterbord</button>
             <label for="tokenInput">Token:</label>
@@ -81,7 +81,6 @@
 
     const TOKEN_KEY = "rowizer_token_coornhert";
 
-
     function toggleTokenVisibility() {
         var tokenField = document.getElementById("tokenInput"); // Zorg dat dit ID klopt met je input veld
         var btn = document.getElementById("toggleTokenBtn");
@@ -94,7 +93,7 @@
             btn.innerText = "🙈";
         }
     }
-    // === TOKEN OPSLAAN / LADEN ===
+
     function saveToken() {
         const token = document.getElementById('tokenInput').value.trim();
         if (token) {
@@ -133,13 +132,12 @@
         loadURL();
     }
 
-    function Today() {
+    function gotoToday() {
         currentDate = todayDate;
         fp.setDate(currentDate, true);
         loadURL();
     }
 
-    // === URL BOUWEN & LADEN ===
     function buildUrl(baseUrl, token, dateStr) {
         let url = baseUrl.trim();
         if (token) {
@@ -159,8 +157,8 @@
         const token   = document.getElementById('tokenInput').value.trim();
         const dateStr = document.getElementById('dateInput').value;
 
-        if (!urlBase) {
-            alert('URL ontbreekt!');
+        if (token === "") {
+            alert('Voer een Zermelo token in!');
             return;
         }
 
