@@ -31,6 +31,10 @@
             padding: 12px 32px; font-size: 100%; background-color: #28a745;
             color: white; border: none; border-radius: 8px; cursor: pointer;
         }
+        button.dev-btn {
+            padding: 12px 32px; font-size: 100%; background-color: #1310c4;
+            color: white; border: none; border-radius: 8px; cursor: pointer;
+        }
         button.load-btn:hover {background-color: #218838;}
         .viewer {flex: 1; background-color: white;}
         iframe {width: 100%; height: 100%; border: none;}
@@ -59,6 +63,7 @@
                 <button class="date-nav" type="button" onclick="gotoToday()">Vandaag</button>
             </div>
             <button class="load-btn" onclick="loadURL()">Laad Roosterbord</button>
+            <button class="dev-btn" id="toggleDevLive" onclick="toggleDev()">Versie: Dev</button>
             <label for="tokenInput">Token:</label>
             <input type="password" id="tokenInput" class="flatpickr-input" placeholder="vul je token in">
             <button class="date-nav" type="button" id="toggleTokenBtn" onclick="toggleTokenVisibility()">👁</button>
@@ -78,6 +83,9 @@
 <script>
     let currentDate = new Date();
     let todayDate = new Date();
+    const urlBaseLive = "https://coornhert-gymnasium.github.io/Rowizer/?portal=coornhert-gymnasium";
+    const urlBaseDev = "https://tomkooij.github.io/Rowizer/?portal=coornhert-gymnasium";
+    let urlBase = urlBaseDev; 
 
     const TOKEN_KEY = "rowizer_token_coornhert";
 
@@ -92,6 +100,19 @@
             tokenField.type = "text";
             btn.innerText = "🙈";
         }
+    }
+
+    function toggleDev() {
+        let btn = document.getElementById("toggleDevLive");
+
+        if (btn.innerText === "Versie: Dev") {
+            btn.innerText = "Versie: Live";
+            urlBase = urlBaseLive;
+        } else {
+            btn.innerText = "Versie: Dev";
+            urlBase = urlBaseDev; 
+        }
+        loadURL();
     }
 
     function saveToken() {
@@ -152,9 +173,6 @@
     }
 
     function loadURL() {
-        //const urlBase = document.getElementById('urlInput').value.trim();
-        //const urlBase = "https://coornhert-gymnasium.github.io/Rowizer/?portal=coornhert-gymnasium";
-        const urlBase = "https://tomkooij.github.io/Rowizer/?portal=coornhert-gymnasium";
         const token   = document.getElementById('tokenInput').value.trim();
         const dateStr = document.getElementById('dateInput').value;
 
