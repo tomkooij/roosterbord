@@ -62,7 +62,7 @@
                 <button class="date-nav" type="button" onclick="changeDate(1)">Volgende</button>
                 <button class="date-nav" type="button" onclick="gotoToday()">Vandaag</button>
             </div>
-            <button class="dev-btn" id="toggleDevLive" onclick="toggleDev()">Versie: Dev</button>
+            <button class="dev-btn" id="toggleDevLive" onclick="toggleDev()">Versie: dev</button>
             <label for="tokenInput">Token:</label>
             <input type="password" id="tokenInput" class="flatpickr-input" placeholder="vul je token in">
             <button class="date-nav" type="button" id="toggleTokenBtn" onclick="toggleTokenVisibility()">👁</button>
@@ -104,11 +104,11 @@
     function toggleDev() {
         let btn = document.getElementById("toggleDevLive");
 
-        if (btn.innerText === "Versie: Dev") {
+        if (btn.innerText === "Versie: dev") {
             btn.innerText = "Versie: Live";
             urlBase = urlBaseLive;
         } else {
-            btn.innerText = "Versie: Dev";
+            btn.innerText = "Versie: dev";
             urlBase = urlBaseDev; 
         }
         loadURL();
