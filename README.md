@@ -16,4 +16,3 @@ npm run dev
 
 Notes:
 - A simple dev server `live-server` is added as a dev dependency and a `dev` npm script is available.
-- If you prefer a different dev server (e.g., `http-server`) tell me and I can update the scripts.
