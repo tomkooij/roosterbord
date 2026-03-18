@@ -62,7 +62,7 @@
                 <button class="date-nav" type="button" onclick="changeDate(1)">Volgende</button>
                 <button class="date-nav" type="button" onclick="gotoToday()">Vandaag</button>
             </div>
-            <button class="dev-btn" id="toggleDevLive" onclick="toggleDev()">Versie: dev</button>
+            <button class="dev-btn" id="toggleDevLive" onclick="toggleDev()">Versie: Live</button>
             <label for="tokenInput">Token:</label>
             <input type="password" id="tokenInput" class="flatpickr-input" placeholder="vul je token in">
             <button class="date-nav" type="button" id="toggleTokenBtn" onclick="toggleTokenVisibility()">👁</button>
@@ -84,7 +84,7 @@
     let todayDate = new Date();
     const urlBaseLive = "https://coornhert-gymnasium.github.io/Rowizer/?portal=coornhert-gymnasium";
     const urlBaseDev = "https://tomkooij.github.io/Rowizer/?portal=coornhert-gymnasium";
-    let urlBase = urlBaseDev; 
+    let urlBase = urlBaseLive; // start met live versie
 
     const TOKEN_KEY = "rowizer_token_coornhert";
 
