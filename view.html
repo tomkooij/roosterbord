@@ -12,11 +12,42 @@
     <style>
         html, body {height: 100%; margin: 0; padding: 0; overflow: hidden;
                     font-family: Arial, sans-serif; background-color: #222;}
-        .container {display: flex; flex-direction: column; height: 100vh;}
-        .input-section {font-size: 20px; padding: 15px; background-color: #333; color: white;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.5);}
+        .container {display: flex; flex-direction: column; height: 100vh; position: relative;}
+        
+        /* Floating input section */
+        .input-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            font-size: 20px;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Show when hovering near top or when section itself is hovered/focused */
+        .top-trigger {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            z-index: 999;
+        }
+
+        .top-trigger:hover + .input-section,
+        .input-section:hover,
+        .input-section:focus-within {
+            transform: translateY(0);
+        }
+
         .input-row {display: flex; flex-wrap: wrap; gap: 12px;
-                    align-items: center; margin-bottom: 12px;}
+                    align-items: center;}
         label {font-weight: bold; min-width: 70px;}
         input[type="text"] {flex: 1; min-width: 150px; padding: 12px 16px;
                             font-size: 100%; border: none; border-radius: 8px; outline: none;}
@@ -52,6 +83,7 @@
 <body>
 
 <div class="container">
+    <div class="top-trigger"></div>
     <div class="input-section">
 
         <div class="input-row">
