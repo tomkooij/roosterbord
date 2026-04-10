@@ -1,0 +1,6 @@
+# probeer het scherm een paar keer uit te zetten vanaf 16u
+#  probeer het om vanaf 7u elke 30 minuten aan te zetten
+#  de logfile zou leeg moeten blijven.
+#  datum? (eventueel touch toevoegen)
+0 16-18 * * * /home/pi/screen_off.sh >>/home/pi/off.log 2>&1
+0,30 7-9 * * * /home/pi/screen_on.sh >>/home/pi/on.log 2>&1
